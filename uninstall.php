@@ -22,7 +22,7 @@
  * @link       #
  * @since      1.0.0
  *
- * @package    Wpcorp_Plugin
+ * @package    WPCorp_Plugin
  */
 
 // If uninstall not called from WordPress, then exit.

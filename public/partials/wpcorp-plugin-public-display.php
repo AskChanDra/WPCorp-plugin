@@ -8,8 +8,8 @@
  * @link       #
  * @since      1.0.0
  *
- * @package    Wpcorp_Plugin
- * @subpackage Wpcorp_Plugin/public/partials
+ * @package    WPCorp_Plugin
+ * @subpackage WPCorp_Plugin/public/partials
  */
 ?>
 

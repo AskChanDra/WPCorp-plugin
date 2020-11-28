@@ -9,8 +9,8 @@
  * @link       #
  * @since      1.0.0
  *
- * @package    Wpcorp_Plugin
- * @subpackage Wpcorp_Plugin/includes
+ * @package    WPCorp_Plugin
+ * @subpackage WPCorp_Plugin/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Wpcorp_Plugin
- * @subpackage Wpcorp_Plugin/includes
+ * @package    WPCorp_Plugin
+ * @subpackage WPCorp_Plugin/includes
  * @author     Chandra Prakash Thapa <cpthapa@gmail.com>
  */
-class Wpcorp_Plugin_i18n {
+class WPCorp_Plugin_i18n {
 
 
 	/**

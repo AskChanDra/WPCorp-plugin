@@ -10,7 +10,7 @@
  *
  * @link              #
  * @since             1.0.0
- * @package           Wpcorp_Plugin
+ * @package           WPCorp_Plugin
  *
  * @wordpress-plugin
  * Plugin Name:       WPCorp Plugin
@@ -35,34 +35,43 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WPCORP_PLUGIN_VERSION', '1.0.0' );
+define( 'WPCorp_Plugin_VERSION', '1.0.0' );
 
+define( 'WPCorp_Plugin_PATH', plugin_dir_path( __FILE__ ));
+define( 'WPCorp_Plugin_URL', plugin_dir_url( __FILE__ ));
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-wpcorp-plugin-activator.php
  */
-function activate_wpcorp_plugin() {
+function activate_WPCorp_Plugin() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcorp-plugin-activator.php';
-	Wpcorp_Plugin_Activator::activate();
+	WPCorp_Plugin_Activator::activate();
+	do_action('WPCorp_Plugin_activate');
 }
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-wpcorp-plugin-deactivator.php
  */
-function deactivate_wpcorp_plugin() {
+function deactivate_WPCorp_Plugin() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcorp-plugin-deactivator.php';
-	Wpcorp_Plugin_Deactivator::deactivate();
+	WPCorp_Plugin_Deactivator::deactivate();
+	do_action('WPCorp_Plugin_deactivate');
 }
 
-register_activation_hook( __FILE__, 'activate_wpcorp_plugin' );
-register_deactivation_hook( __FILE__, 'deactivate_wpcorp_plugin' );
+register_activation_hook( __FILE__, 'activate_WPCorp_Plugin' );
+register_deactivation_hook( __FILE__, 'deactivate_WPCorp_Plugin' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-wpcorp-plugin.php';
+
+/**
+ * Initialise CMB2 plugin
+ */
+require plugin_dir_path( __FILE__ ) . 'admin/cmb2-initialiser.php';
 
 /**
  * Begins execution of the plugin.
@@ -73,10 +82,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wpcorp-plugin.php';
  *
  * @since    1.0.0
  */
-function run_wpcorp_plugin() {
+function run_WPCorp_Plugin() {
 
-	$plugin = new Wpcorp_Plugin();
+	$plugin = new WPCorp_Plugin();
 	$plugin->run();
 
 }
-run_wpcorp_plugin();
+run_WPCorp_Plugin();

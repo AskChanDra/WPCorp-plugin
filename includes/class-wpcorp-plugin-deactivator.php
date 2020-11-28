@@ -6,8 +6,8 @@
  * @link       #
  * @since      1.0.0
  *
- * @package    Wpcorp_Plugin
- * @subpackage Wpcorp_Plugin/includes
+ * @package    WPCorp_Plugin
+ * @subpackage WPCorp_Plugin/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Wpcorp_Plugin
- * @subpackage Wpcorp_Plugin/includes
+ * @package    WPCorp_Plugin
+ * @subpackage WPCorp_Plugin/includes
  * @author     Chandra Prakash Thapa <cpthapa@gmail.com>
  */
-class Wpcorp_Plugin_Deactivator {
+class WPCorp_Plugin_Deactivator {
 
 	/**
 	 * Short Description. (use period)
