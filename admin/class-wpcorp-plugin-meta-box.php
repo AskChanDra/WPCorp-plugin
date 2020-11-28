@@ -74,7 +74,7 @@ class WPCorp_Plugin_Meta_Box {
 	 * Hook in and add a box to be available in the CMB2 REST API. Can only happen on the 'cmb2_init' hook.
 	 * More info: https://github.com/CMB2/CMB2/wiki/REST-API
 	 */
-	public function wpcorp_register_rest_api_box() {
+	public function wpcorp_register_meta_box() {
 
 		$cmb_rest = new_cmb2_box( array(
 

@@ -80,6 +80,7 @@ class WPCorp_Plugin {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->define_meta_box_hooks();
+		$this->define_rest_api_hooks();
 
 	}
 
@@ -133,6 +134,11 @@ class WPCorp_Plugin {
 		 * The class responsible for creating custom feild with meta box.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wpcorp-plugin-meta-box.php';
+
+		/**
+		 * The class responsible for creating custom REST API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wpcorp-plugin-rest-api.php';
 
 		$this->loader = new WPCorp_Plugin_Loader();
 
@@ -225,9 +231,25 @@ class WPCorp_Plugin {
 
 		$plugin_meta_box = new WPCorp_Plugin_Meta_Box( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'cmb2_init', $plugin_meta_box, 'wpcorp_register_rest_api_box');
+		$this->loader->add_action( 'cmb2_init', $plugin_meta_box, 'wpcorp_register_meta_box');
 
 	}
+
+	/**
+	 * Register all of the hooks related to the REST API functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_rest_api_hooks() {
+
+		$plugin_rest_api = new WPCorp_Plugin_REST_API( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'rest_api_init', $plugin_rest_api, 'wpcorp_register_rest_api');
+
+	}
+
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
