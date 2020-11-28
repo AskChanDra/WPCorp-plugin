@@ -99,5 +99,48 @@ class WPCorp_Plugin_Public {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpcorp-plugin-public.js', array( 'jquery' ), $this->version, false );
 
 	}
+	
+	/**
+	 * Creating custom CRA app page template
+	 *
+	 * @since    1.0.0
+	 */
+	public function wpcorp_cra_template( $template ) {
+		$my_page = get_option('wpcorp_page');
+		$file_name = 'wpcorp-plugin-contact-page-template.php';
+
+    if ( $my_page && is_page( $my_page ) ) {
+        if ( locate_template( $file_name ) ) {
+            $template = locate_template( $file_name );
+        } else {
+            // Template not found in theme's folder, use plugin's template as a fallback
+						//$template = plugin_dir_path( __FILE__ ) . $file_name;
+						$template = plugin_dir_path( __FILE__ ) . 'templates/' . $file_name;
+        }
+    }
+
+    return $template;
+	}
+
+	/**
+	 * Create custom CRA page if not exists
+	 *
+	 * @since    1.0.0
+	 */
+	public function wpcorp_create_cra_page() {
+		$my_page = get_option('wpcorp_page');
+		if (!$my_page||FALSE === get_post_status( $my_page )) {
+				// Create post/page object
+				$my_new_page = array(
+						'post_title' => 'Request a Quote',
+						'post_content' => '<div id="root" ></div>',
+						'post_status' => 'publish',
+						'post_type' => 'page'
+				);
+				// Insert the post into the database
+				$my_page = wp_insert_post( $my_new_page );
+				update_option('wpcorp_page',$my_page);
+		}
+ }
 
 }

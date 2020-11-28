@@ -182,8 +182,13 @@ class WPCorp_Plugin {
 
 		$plugin_public = new WPCorp_Plugin_Public( $this->get_plugin_name(), $this->get_version() );
 
+		// Actions
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $plugin_public, 'wpcorp_create_cra_page' );
+
+		// Filter
+		$this->loader->add_filter( 'template_include', $plugin_public, 'wpcorp_cra_template' );		
 
 	}
 
