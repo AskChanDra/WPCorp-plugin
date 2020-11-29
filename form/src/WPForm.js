@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
-//import axios from 'axios';
+import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
+import axios from 'axios';
 
+console.log(process.env);
 
 function WPForm() {
-  const [ state, setState ] = useState({ companyname: "", firstname: "", lastname: "", jobtitle:"", phonenumber: "", email:"", errors: [] });
+  const [ state, setState ] = useState({ 
+    companyname: "", 
+    firstname: "", 
+    lastname: "", 
+    jobtitle:"", 
+    phonenumber: "", 
+    email:"", 
+    errors: [],
+    submiterror:null,
+    success:null,
+  });
 
   const handleInputChange = (event) => {
     const key = event.target.name;
@@ -15,9 +26,32 @@ function WPForm() {
 
   }
 
-  const hasError= (key) => {
+  const hasError = (key) => {
     return state.errors.indexOf(key) !== -1;
-  }
+  };
+
+  const sendMessage = (nonce) => {
+
+    axios.post(`${process.env.REACT_APP_API_URL}/wp-json/wpcorp/v1/message/?nonce=${nonce}`, state)
+    .then( response => {
+      //console.log(response.data);
+      setState( (prevState) => {
+        return { ...prevState, success: response.data.success, submiterror:response.data.submiterrors };
+      });
+    }).catch( error => {
+      console.log(error.response);
+    });
+  };
+
+  const getWPNonce = () => {
+    axios.get(`${process.env.REACT_APP_API_URL}/wp-json/wpcorp/v1/nonce`)
+    .then( response => {
+      //console.log(response.data.nonce);
+      sendMessage(response.data.nonce);
+    }).catch( error => {
+      console.log(error.response);
+    });
+  };
 
   const handleSubmit = (event) => {
 
@@ -35,32 +69,31 @@ function WPForm() {
     if (state.phonenumber === "") {
       errors.push("phonenumber");
     }
+
+    //Email 
+    if (state.email === "") {
+      errors.push("email");
+    }
   
     //email
     const expression = /\S+@\S+/;
-    var validEmail = expression.test(String(state.email).toLowerCase());
-  
+    const validEmail = expression.test(String(state.email).toLowerCase());
+
     if (!validEmail) {
       errors.push("email");
     }
   
-    setState({
-      errors:errors
+    setState((prevState) => {
+      return { ...prevState, errors: errors }
     })
-    console.log("Error:", errors);
-    console.log("State:", state);
 
-
-    setState( prevState => {
-      return { ...prevState, [errors]:errors }
-    })
-    // console.log("State:", state);
+    //console.log("State:", state);
   
     if (errors.length > 0) {
       return false;
     } else {
-      alert("everything good. submit form!");
-      // Send POST Request....
+      getWPNonce();
+      //alert(" Looks ok to submit!");
     }
   }
 
@@ -100,7 +133,7 @@ function WPForm() {
 
           <Form.Group as={Row} controlId="formHorizontalLastName">
             <Form.Label column sm={2}>
-              Last Name
+              Last Name (optional)
             </Form.Label>
             <Col sm={10}>
               <Form.Control name="lastname" value={state.lastname} type="text" placeholder="Last Name" onChange={ handleInputChange } />
@@ -109,7 +142,7 @@ function WPForm() {
 
           <Form.Group as={Row} controlId="formHorizontalJobTitle">
             <Form.Label column sm={2}>
-              Job Title
+              Job Title (optional)
             </Form.Label>
             <Col sm={10}>
               <Form.Control name="jobtitle" value={state.jobtitle} type="text" placeholder="Job Title" onChange={ handleInputChange } />
@@ -158,7 +191,7 @@ function WPForm() {
 
           <Form.Group as={Row} controlId="formHorizontalCheck">
             <Col sm={{ span: 10, offset: 2 }}>
-              <Form.Check label="The information collected will be used in accordance with our privacy plicy" />
+              <Form.Check label="The information collected will be used in accordance with our privacy policy" />
             </Col>
           </Form.Group>
 
@@ -167,6 +200,8 @@ function WPForm() {
               <Button variant="secondary" type="submit">Request a Quote</Button>
             </Col>
           </Form.Group>
+          {state.success && <Alert variant="success">Form successfully submited.</Alert>}
+          {state.submiterror && <Alert variant="danger">Error while submitting form. Try again!</Alert>}
         </Form>
       </div>
     </>

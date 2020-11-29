@@ -62,19 +62,25 @@ class WPCorp_Plugin_Public {
 	public function enqueue_styles() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
+		 * Register the stylesheets for the plublic facing side of the site.
 		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in WPCorp_Plugin_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The WPCorp_Plugin_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpcorp-plugin-public.css', array(), $this->version, 'all' );
-
+		$my_page = get_option('wpcorp_page');
+		if($my_page && is_page($my_page)) {
+			if (in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
+				$CSSfiles = scandir( WPCORP_PLUGIN_PATH . 'form/build/static/css/');
+			 	foreach($CSSfiles as $filename) {
+					if(strpos($filename,'.css')&&!strpos($filename,'.css.map')) {
+						wp_enqueue_style( 'socialpost_react_css', WPCORP_PLUGIN_URL . 'form/build/static/css/' . $filename, array(), mt_rand(10,1000), 'all' );
+					}
+			 	}
+			}
+		} else {
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpcorp-plugin-public.css', array(), $this->version, 'all' );
+		}
+		
 	}
 
 	/**
@@ -85,19 +91,36 @@ class WPCorp_Plugin_Public {
 	public function enqueue_scripts() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
+		 * Register scripts for public facing site.
 		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in WPCorp_Plugin_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The WPCorp_Plugin_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpcorp-plugin-public.js', array( 'jquery' ), $this->version, false );
+		$my_page = get_option('wpcorp_page');
+		if($my_page && is_page($my_page)) {
+			if (in_array($_SERVER['REMOTE_ADDR'], array('local','127.0.0.1', '::1'))) {
+	    	// code for localhost here
+				// PROD
+			 	$JSfiles = scandir( WPCORP_PLUGIN_PATH . 'form/build/static/js/');
+			 	$react_js_to_load = array();
+			 	foreach($JSfiles as $filename) {
+			 		if(strpos($filename,'.js')&&!strpos($filename,'.js.map')) {
+			 			$react_js_to_load[] = WPCORP_PLUGIN_URL . 'form/build/static/js/' . $filename;
+			 		}
+			 	}
+			} else {
+				$react_js_to_load[] = 'http://localhost:3000/static/js/bundle.js';
+			}
+		 	// DEV
+			 // React dynamic loading
+			 $i = 0; 
+			 foreach($react_js_to_load as $url ){
+				 $i++;
+				 wp_enqueue_script('wpcorp_react' . $i , $url, '', mt_rand(10,1000), true);
+			 }			
 
+			} else {
+				wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpcorp-plugin-public.js', array( 'jquery' ), $this->version, false );
+			}
 	}
 	
 	/**

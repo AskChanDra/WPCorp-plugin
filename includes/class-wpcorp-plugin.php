@@ -67,8 +67,8 @@ class WPCorp_Plugin {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'WPCorp_Plugin_VERSION' ) ) {
-			$this->version = WPCorp_Plugin_VERSION;
+		if ( defined( 'WPCORP_PLUGIN_VERSION' ) ) {
+			$this->version = WPCORP_PLUGIN_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
@@ -173,7 +173,7 @@ class WPCorp_Plugin {
 		$plugin_admin = new WPCorp_Plugin_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 11 );
 
 	}
 
@@ -246,7 +246,11 @@ class WPCorp_Plugin {
 
 		$plugin_rest_api = new WPCorp_Plugin_REST_API( $this->get_plugin_name(), $this->get_version() );
 
+		// Actions
 		$this->loader->add_action( 'rest_api_init', $plugin_rest_api, 'wpcorp_register_rest_api');
+
+		// Filters
+		$this->loader->add_filter( 'rest_pre_serve_request', $plugin_rest_api, 'wpcorp_rest_send_cors_headers');
 
 	}
 

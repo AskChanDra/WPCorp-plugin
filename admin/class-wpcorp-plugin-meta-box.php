@@ -132,14 +132,6 @@ class WPCorp_Plugin_Meta_Box {
 			'type' => 'text_email'
 		));
 
-		// $cmb_rest->add_field( array(
-		// 	'name' => 'Phone Number',
-		// 	'desc' => 'Add your phone number name.',
-		// 	'default' => '',
-		// 	'id' => 'wpcorp_phone_number',
-		// 	'type' => 'text'
-		// ));
-
 		$cmb_rest->add_field( array(
 			
 			'name' => __( 'Phone Number', 'wpcorp' ),
