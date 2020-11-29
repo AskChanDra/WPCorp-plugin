@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
-console.log(process.env);
-
 function WPForm() {
   const [ state, setState ] = useState({ 
     companyname: "", 
